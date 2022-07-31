@@ -1,6 +1,6 @@
-#MSUDA Portfolio Milestone 
+MSUDA Portfolio Milestone 
 
-#Syracuse University - M.S. Applied Data Science
+Syracuse University - M.S. Applied Data Science
 
 Maria Ng
 
@@ -8,8 +8,10 @@ SUID: 42610-3540
 
 Email: mng103@syr.edu or mariang168@gmail.com
 
-#Contents
+Contents
+
 Background
+
 Introduction
 Overview of the major practice areas in data science
 Collect and Organize Data	
