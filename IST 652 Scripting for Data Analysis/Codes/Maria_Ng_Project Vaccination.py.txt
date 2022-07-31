@@ -1,0 +1,512 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[28]:
+
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import plotly.express as px
+
+#Importing the primary dataset on March 15 2021 ()
+df_covid_vaccination=pd.read_csv('country_vaccinations.csv')
+
+#Data Cleaning
+
+#There are a lot of numerical columns which are Null/NaN in data frame to replace them with zero. Replace Wales
+df_covid_vaccination = df_covid_vaccination.fillna(0)
+df_covid_vaccination = df_covid_vaccination.replace(to_replace ="Wales", 
+                 value ="United Kingdom")
+df_covid_vaccination = df_covid_vaccination.replace(to_replace ="Scotland", 
+                 value ="United Kingdom")  
+df_covid_vaccination = df_covid_vaccination.replace(to_replace ="Northern Ireland", 
+                 value ="United Kingdom")  
+df_covid_vaccination = df_covid_vaccination.replace(to_replace ="England", 
+                 value ="United Kingdom")  
+
+#Explore data
+print(df_covid_vaccination.head(10))
+print(df_covid_vaccination.tail(10))
+print(df_covid_vaccination.dtypes)
+print(df_covid_vaccination.describe())
+
+
+#Compare top 10 countries 
+
+#Top 10 countries with total_vaccination
+df_covid_vaccination_agg=df_covid_vaccination.groupby(['country'])["total_vaccinations"].max().reset_index()
+df_covid_vaccination_agg=df_covid_vaccination_agg.nlargest(10,["total_vaccinations"]).reset_index()
+del df_covid_vaccination_agg['index']
+top10_countries=df_covid_vaccination_agg['country']
+print(df_covid_vaccination_agg)
+
+
+#Top 10 countries with people_vaccinated
+df_covid_vaccination_agg=df_covid_vaccination.groupby(['country'])["people_vaccinated"].max().reset_index()
+df_covid_vaccination_agg=df_covid_vaccination_agg.nlargest(10,["people_vaccinated"]).reset_index()
+del df_covid_vaccination_agg['index']
+top10_countries=df_covid_vaccination_agg['country']
+print(df_covid_vaccination_agg)
+
+
+#Top 10 countries with people_fully_vaccinated
+df_covid_vaccination_agg=df_covid_vaccination.groupby(['country'])["people_fully_vaccinated"].max().reset_index()
+df_covid_vaccination_agg=df_covid_vaccination_agg.nlargest(10,["people_fully_vaccinated"]).reset_index()
+del df_covid_vaccination_agg['index']
+top10_countries=df_covid_vaccination_agg['country']
+print(df_covid_vaccination_agg)
+
+
+total_vaccinations = df_covid_vaccination['total_vaccinations'].max()
+print("Total count of global total_vaccinatons:", total_vaccinations)
+
+max_total_vaccination = df_covid_vaccination['total_vaccinations'].max()
+print("Max count of global vaccinaton by a day:", max_total_vaccination)
+
+#Compare top 5 countries based on total vaccinations: US, Israel, Hungary, Denmark and Malta
+
+#US
+variables = ['country','total_vaccinations','people_vaccinated','people_fully_vaccinated','vaccines']
+USdata = df_covid_vaccination.loc[(df_covid_vaccination['country']=='United States'),variables].max()
+print(USdata.head())
+print(len(USdata))
+US_population = 330084974
+Percentage_fully_vaccinated = float(38335432.0/US_population*100)
+print("United State percentage of people fully vaccinated:", Percentage_fully_vaccinated, "%")
+Percentage_vaccinated = float( 71054445.0/US_population*100)
+print("United State percentage of people partially vaccinated:", Percentage_vaccinated, "%")
+
+#Israel
+variables = ['country','total_vaccinations','people_vaccinated','people_fully_vaccinated','vaccines']
+Israeldata = df_covid_vaccination.loc[(df_covid_vaccination['country']=='Israel'),variables].max()
+print(Israeldata.head())
+print(len(Israeldata))
+Israel_population = 8789774
+Percentage_fully_vaccinated = float(4291116.0/Israel_population*100)
+print("Israel percentage of people fully vaccinated:", Percentage_fully_vaccinated, "%")
+Percentage_vaccinated = float(5200395.0/Israel_population*100)
+print("Israel percentage of people partially vaccinated:", Percentage_vaccinated, "%")
+
+#Hungary
+variables = ['country','total_vaccinations','people_vaccinated','people_fully_vaccinated','vaccines']
+Hungarydata = df_covid_vaccination.loc[(df_covid_vaccination['country']=='Hungary'),variables].max()
+print(Hungarydata.head())
+print(len(Hungarydata))
+Hungary_population = 9642941
+Percentage_fully_vaccinated = float(399505/Hungary_population*100)
+print("Hungary percentage of people fully vaccinated:", Percentage_fully_vaccinated, "%")
+Percentage_vaccinated = float(1.34707e+06/Hungary_population*100)
+print("Hungary percentage of people partially vaccinated:", Percentage_vaccinated, "%")
+
+#Denmark
+variables = ['country','total_vaccinations','people_vaccinated','people_fully_vaccinated','vaccines']
+Denmarkdata = df_covid_vaccination.loc[(df_covid_vaccination['country']=='Denmark'),variables].max()
+print(Denmarkdata.head())
+print(len(Denmarkdata))
+Denmark_population = 5.806822e+06
+Percentage_fully_vaccinated = float(1.7e+06/Denmark_population*100)
+print("Denmark percentage of people fully vaccinated:", Percentage_fully_vaccinated, "%")
+Percentage_vaccinated = float(2.2e+06/Denmark_population*100)
+print("Demark percentage of people partially vaccinated:", Percentage_vaccinated, "%")
+
+#Malta
+variables = ['country','total_vaccinations','people_vaccinated','people_fully_vaccinated','vaccines']
+Maltadata = df_covid_vaccination.loc[(df_covid_vaccination['country']=='Malta'),variables].max()
+print(Maltadata.head())
+print(len(Maltadata))
+Malta_population = 442385
+Percentage_fully_vaccinated = float(39695.0/Malta_population*100)
+print("Malta percentage of people fully vaccinated:", Percentage_fully_vaccinated, "%")
+Percentage_vaccinated = float(82671/Malta_population*100)
+print("Malta percentage of people partially vaccinated:", Percentage_vaccinated, "%")
+
+
+# In[32]:
+
+
+#Vaccines
+vaccine = df_covid_vaccination.groupby(["vaccines"])['total_vaccinations'].max().reset_index()
+vaccine.columns = ["Vaccines", "Total vaccinations"]
+
+print(vaccine)
+print(vaccine.columns)
+
+vaccine_country = df_covid_vaccination.groupby(["country"])['total_vaccinations','vaccines'].max().reset_index()
+vaccine_country.columns = ["Country", "Total vaccinations", "Vaccines"]
+
+#group country and company with maximum total_vaccinations
+groupby_country_vaccine = df_covid_vaccination.groupby(by=['country','vaccines'], sort=False, as_index=False)['total_vaccinations'].max()
+
+print(vaccine_country.head(5))
+print(vaccine_country.columns)
+
+#group country and company with maximum total_vaccinations
+groupby_country_vaccine = df_covid_vaccination.groupby(by=['country','vaccines'], sort=False, as_index=False)['total_vaccinations'].max()
+
+#group company and take the sum of total vaccines for each vaccine company
+top_vaccines = groupby_country_vaccine.groupby(by=['vaccines'], sort=False, as_index=False)['total_vaccinations'].sum()
+
+#get the top 25
+top25_vaccines = top_vaccines.nlargest(25,columns = ['total_vaccinations'])
+
+#plot the graph
+fig = px.bar(x=top25_vaccines['total_vaccinations'], y=top25_vaccines['vaccines'],
+            labels={"x": "Total vaccinations", "y": "Vaccine Company"},
+             )
+fig.show()
+
+
+# In[29]:
+
+
+print(vaccine_country.head(5))
+
+
+# In[33]:
+
+
+#group country with company and total vaccinations details
+cntry_total_vaccinations = df_covid_vaccination.groupby(['country']).max()[["total_vaccinations", "vaccines"]].reset_index()
+cntry_total_vaccinations
+
+fig = px.choropleth(cntry_total_vaccinations, locations = 'country',locationmode = 'country names',color = 'vaccines',
+                   title = 'Vaccines by Country',hover_data= ['total_vaccinations'],
+                   color_discrete_map=dict(zip(cntry_total_vaccinations['vaccines'], px.colors.sequential.Viridis)),
+                   labels={'vaccines': 'Vaccine', 'country': 'Country', 'total_vaccinations': 'Total Vaccination'})
+ 
+fig.show()
+
+
+# In[30]:
+
+
+#Bar graph population
+labels = ['United States', 'Israel', 'Hungary', 'Denmark', 'Malta']
+population = [330084974, 8789774, 9642941, 5806822, 442385]
+partially_vaccinated = [7.10544e+07, 3.82448e+06, 1.34707e+06, 586153, 82671]
+fully_vaccinated = [3.83354e+07, 4.29112e+06, 399505, 258786, 39695]
+
+x = np.arange(len(labels))  # the label locations
+width = 0.35  # the width of the bars
+
+fig, ax = plt.subplots()
+rects1 = ax.bar(x - width/2, population, width, label='population')
+#rects2 = ax.bar(x - width/2, vaccinated, width, label='vaccinated')
+#rects3 = ax.bar(x + width/2, fully_vaccinated, width, label='fully_vaccinated')
+
+# Add some text for labels, title and custom x-axis tick labels, etc.
+ax.set_ylabel('Count')
+ax.set_title('Country Population 2021')
+ax.set_xticks(x)
+ax.set_xticklabels(labels)
+ax.legend()
+
+def autolabel(rects):
+    """Attach a text label above each bar in *rects*, displaying its height."""
+    for rect in rects:
+        height = rect.get_height()
+        ax.annotate('{}'.format(height),
+                    xy=(rect.get_x() + rect.get_width() / 2, height),
+                    xytext=(0, 3),  # 3 points vertical offset
+                    textcoords="offset points",
+                    ha='center', va='bottom')
+
+
+autolabel(rects1)
+#autolabel(rects2)
+#autolabel(rects3)
+
+fig.tight_layout()
+
+plt.show()
+
+
+# In[31]:
+
+
+#Bar graph Vaccination % 
+
+labels = ['United States', 'Israel', 'Hungary', 'Denmark', 'Malta']
+partially_vaccinated = [11.6, 48.8, 4.1, 29.3, 9]
+fully_vaccinated = [21.5, 59.2, 13.9, 37.9, 18.9]
+
+
+x = np.arange(len(labels))  # the label locations
+width = 0.35  # the width of the bars
+
+fig, ax = plt.subplots()
+rects1 = ax.bar(x - width/2, partially_vaccinated, width, label='partially_vaccinated')
+rects2 = ax.bar(x + width/2, fully_vaccinated, width, label='fully_vaccinated')
+
+# Add some text for labels, title and custom x-axis tick labels, etc.
+ax.set_ylabel('Percentage')
+ax.set_title('Percentage Vaccination of Partially vs. Fully')
+ax.set_xticks(x)
+ax.set_xticklabels(labels)
+ax.legend()
+
+
+def autolabel(rects):
+    """Attach a text label above each bar in *rects*, displaying its height."""
+    for rect in rects:
+        height = rect.get_height()
+        ax.annotate('{}'.format(height),
+                    xy=(rect.get_x() + rect.get_width() / 2, height),
+                    xytext=(0, 3),  # 3 points vertical offset
+                    textcoords="offset points",
+                    ha='center', va='bottom')
+
+
+autolabel(rects1)
+autolabel(rects2)
+
+fig.tight_layout()
+
+plt.show()
+
+
+# In[42]:
+
+
+#Importing the secondary dataset on March 15 2021 ()
+df_covid_vaccinationUS=pd.read_csv('covid19_vaccinations_in_the_united_states.csv')
+
+#Data Cleaning - none
+
+#Explore data
+print(df_covid_vaccinationUS.head(10))
+print(df_covid_vaccinationUS.tail(10))
+print(df_covid_vaccinationUS.dtypes)
+print(df_covid_vaccinationUS.describe())
+
+variables = ['State/Territory/Federal Entity','Percent of Total Pop with at least One Dose by State of Residence','Percent of Total Pop with 2 Doses by State of Residence']
+CAdata = df_covid_vaccinationUS.loc[(df_covid_vaccinationUS['State/Territory/Federal Entity']=='California'),variables]
+print(CAdata.head())
+print(len(CAdata))
+
+#Bar graph Vaccination % included California(CA)
+
+labels = ['United States', 'California','Israel', 'Hungary', 'Denmark', 'Malta']
+partially_vaccinated = [11.6, 24.2, 48.8, 4.1, 29.3, 9]
+fully_vaccinated = [21.5, 11.7, 59.2, 13.9, 37.9, 18.9]
+
+
+x = np.arange(len(labels))  # the label locations
+width = 0.35  # the width of the bars
+
+fig, ax = plt.subplots()
+rects1 = ax.bar(x - width/2, partially_vaccinated, width, label='partially_vaccinated')
+rects2 = ax.bar(x + width/2, fully_vaccinated, width, label='fully_vaccinated')
+
+# Add some text for labels, title and custom x-axis tick labels, etc.
+ax.set_ylabel('Percentage')
+ax.set_title('Percentage Vaccination of Partially vs. Fully')
+ax.set_xticks(x)
+ax.set_xticklabels(labels)
+ax.legend()
+
+
+def autolabel(rects):
+    """Attach a text label above each bar in *rects*, displaying its height."""
+    for rect in rects:
+        height = rect.get_height()
+        ax.annotate('{}'.format(height),
+                    xy=(rect.get_x() + rect.get_width() / 2, height),
+                    xytext=(0, 3),  # 3 points vertical offset
+                    textcoords="offset points",
+                    ha='center', va='bottom')
+
+
+autolabel(rects1)
+autolabel(rects2)
+
+fig.tight_layout()
+
+plt.show()
+
+
+# In[35]:
+
+
+#Importing the tertiary dataset on March 20 2021 () 
+df_covid_vaccinationCA=pd.read_csv('covid19vaccinesbycounty.csv')
+
+#Data cleaning - none
+
+#Explore data 
+print(df_covid_vaccinationCA.head(10)) 
+print(df_covid_vaccinationCA.tail(10)) 
+print(df_covid_vaccinationCA.dtypes) 
+print(df_covid_vaccinationCA.describe()) 
+variables = ['county','total_partially_vaccinated', 'cumulative_fully_vaccinated', 'cumulative_pfizer_doses', 'cumulative_moderna_doses']
+
+#Marin County 
+Marindata = df_covid_vaccinationCA.loc[(df_covid_vaccinationCA['county']=='Marin'),variables].max() 
+print(Marindata.head()) 
+print(len(Marindata)) 
+Marin_population = 257154 
+Percentage_fully_vaccinated = float(50362/Marin_population*100) 
+print("Marin percentage of people fully vaccinated:", Percentage_fully_vaccinated, "%") 
+Percentage_vaccinated = float( 48126/Marin_population*100) 
+print("Marin percentage of people partially vaccinated:", Percentage_vaccinated, "%")
+
+#Contra Costa County 
+CCCdata = df_covid_vaccinationCA.loc[(df_covid_vaccinationCA['county']=='Contra Costa'),variables].max() 
+print(CCCdata.head()) 
+print(len(CCCdata)) 
+CCC_population = 1159540 
+Percentage_fully_vaccinated = float(181120/CCC_population*100) 
+print("Contra Costa County percentage of people fully vaccinated:", Percentage_fully_vaccinated, "%") 
+Percentage_vaccinated = float( 145664/CCC_population*100) 
+print("Contra Costa County percentage of people partially vaccinated:", Percentage_vaccinated, "%")
+
+#Alameda County 
+Alamedadata = df_covid_vaccinationCA.loc[(df_covid_vaccinationCA['county']=='Alameda'),variables].max() 
+print(Alamedadata.head()) 
+print(len(Alamedadata)) 
+Alameda_population = 1680480 
+Percentage_fully_vaccinated = float(242233/Alameda_population*100) 
+print("Alameda County percentage of people fully vaccinated:", Percentage_fully_vaccinated, "%") 
+Percentage_vaccinated = float( 229127/Alameda_population*100) 
+print("Alameda County percentage of people partially vaccinated:", Percentage_vaccinated, "%")
+
+#SF County 
+SFdata = df_covid_vaccinationCA.loc[(df_covid_vaccinationCA['county']=='San Francisco'),variables].max() 
+print(SFdata.head()) 
+print(len(SFdata)) 
+SF_population = 883255 
+Percentage_fully_vaccinated = float(133739/SF_population*100) 
+print("San Francisco County percentage of people fully vaccinated:", Percentage_fully_vaccinated, "%") 
+Percentage_vaccinated = float( 143820/SF_population*100) 
+print("San Francisco County percentage of people partially vaccinated:", Percentage_vaccinated, "%")
+
+
+# In[37]:
+
+
+#Bar graph Vaccination % included CA Counties
+
+labels = ['US', 'CA', 'Marin', 'CCC', 'Alameda', 'SF','IL', 'HUNG', 'DK', 'MT'] 
+partially_vaccinated = [11.6, 24.2, 18.7, 12.6, 13.6, 16.3, 48.8, 4.1, 29.3, 9] 
+fully_vaccinated = [21.5, 11.7, 19.6, 15.6, 14.4, 15.1, 59.2, 13.9, 37.9, 18.9]
+
+x = np.arange(len(labels)) 
+# the label locations width = 0.35 # the width of the bars
+
+fig, ax = plt.subplots() 
+rects1 = ax.bar(x - width/2, partially_vaccinated, width, label='partially_vaccinated') 
+rects2 = ax.bar(x + width/2, fully_vaccinated, width, label='fully_vaccinated')
+
+#Add some text for labels, title and custom x-axis tick labels, etc.
+ax.set_ylabel('Percentage') 
+ax.set_title('Percentage Vaccination of Partially vs. Fully') 
+ax.set_xticks(x) 
+ax.set_xticklabels(labels) 
+ax.legend()
+
+def autolabel(rects): 
+    """Attach a text label above each bar in rects, displaying its height.""" 
+    for rect in rects: 
+        height = rect.get_height() 
+        ax.annotate('{}'.format(height), 
+                    xy=(rect.get_x() + rect.get_width() / 2, height), 
+                    xytext=(0, 3), # 3 points vertical offset 
+                    textcoords="offset points", 
+                    ha='center', va='bottom')
+
+autolabel(rects1) 
+autolabel(rects2)
+
+fig.tight_layout()
+
+plt.show()
+
+
+# In[40]:
+
+
+#Bar graph CA counties population 
+labels = ['Marin', 'Contra Costa', 'Alameda', 'San Francisco'] 
+population = [257154, 1159540, 1680480, 883255]
+
+x = np.arange(len(labels)) 
+# the label locations width = 0.35 # the width of the bars
+
+fig, ax = plt.subplots() 
+rects1 = ax.bar(x - width/2, population, width, label='population') 
+#rects2 = ax.bar(x - width/2, vaccinated, width, label='vaccinated') 
+#rects3 = ax.bar(x + width/2, fully_vaccinated, width, label='fully_vaccinated')
+
+#Add some text for labels, title and custom x-axis tick labels, etc.
+ax.set_ylabel('Count') 
+ax.set_title('County Population 2021') 
+ax.set_xticks(x) 
+ax.set_xticklabels(labels) 
+ax.legend()
+
+def autolabel(rects): 
+    """Attach a text label above each bar in rects, displaying its height.""" 
+    for rect in rects: 
+        height = rect.get_height() 
+        ax.annotate('{}'.format(height), 
+                    xy=(rect.get_x() + rect.get_width() / 2, height), 
+                    xytext=(0, 3), # 3 points vertical offset 
+                    textcoords="offset points", 
+                    ha='center', va='bottom')
+
+autolabel(rects1) 
+#autolabel(rects2) 
+#autolabel(rects3)
+
+fig.tight_layout()
+
+plt.show()
+
+
+# In[39]:
+
+
+#Bar graph # of vaccine type by CA Counties
+
+labels = ['Marin', 'Contra Costa', 'Alameda', 'San Francisco'] 
+Pfizer = [81350, 287512, 418903, 241755] 
+Moderna = [62721, 209179, 262180, 156959]
+
+x = np.arange(len(labels)) # the label locations width = 0.35 # the width of the bars
+
+fig, ax = plt.subplots() 
+rects1 = ax.bar(x - width/2, Pfizer, width, label='Pfizer Dose') 
+rects2 = ax.bar(x + width/2, Moderna, width, label='Moderna Dose')
+
+#Add some text for labels, title and custom x-axis tick labels, etc.
+ax.set_ylabel('Dose') 
+ax.set_title('Pfizer and Moderna Doses Comparison') 
+ax.set_xticks(x) 
+ax.set_xticklabels(labels) 
+ax.legend()
+
+def autolabel(rects): 
+    """Attach a text label above each bar in rects, displaying its height.""" 
+    for rect in rects: 
+        height = rect.get_height() 
+        ax.annotate('{}'.format(height), 
+                    xy=(rect.get_x() + rect.get_width() / 2, height), 
+                    xytext=(0, 3), # 3 points vertical offset 
+                    textcoords="offset points", 
+                    ha='center', va='bottom')
+
+autolabel(rects1) 
+autolabel(rects2)
+
+fig.tight_layout()
+
+plt.show()
+
+
+# In[ ]:
+
+
+
+
+
