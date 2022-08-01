@@ -42,13 +42,13 @@ Several times I would wonder if an experiment performed has a similar finding fr
 
 Data science has gained wider usage and popularity since 2001 "as a new, interdisciplinary concept, with three aspects: data design, collection, and analysis (Murtagh 2018)"  Finally, I can further pursue my interest in mastering data as a language, statistics as grammar rule, and art as information visualization that feed my continuous curiosity. In 2019, I was admitted to Syracuse University's master's program in Applied Data Science. After three years, I am thankful to have this learning journey with my fellow data scientists and professors while going through a pandemic and pivoting my career. In 2021, I finally hung my white lab coat as a pharmaceutical scientist and created a new role for myself within my organization.
 
-## Overview of the major practice areas in data science
+## Overview of the Major Practice Areas in Data Science
 
 ## Collect and Organize Data	
 
 ## Identify Patterns in Data	
 
-## Alternative Strategies based on the data
+## Alternative Strategies based on the Data
 
 ## Develop a Plan of Action
 
