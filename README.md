@@ -10,8 +10,6 @@ Email: mng103@syr.edu or mariang168@gmail.com
 
 ## Contents
 
-Background
-
 Introduction
 
 Overview of the major practice areas in data science
@@ -43,5 +41,22 @@ As a scientist, I have been trained in the scientific method, a systematic appro
 Several times I would wonder if an experiment performed has a similar finding from a previous one, and I could refine the following experiment. But, I would have difficulty recalling because the data wasn't readily available or even accurately pulling the correct information. What a miserable time for a scientist trying to innovate a new drug treatment! What if I had a magic wand that would readily present the exact information?
 
 Data science has gained wider usage and popularity since 2001 "as a new, interdisciplinary concept, with three aspects: data design, collection, and analysis (Murtagh 2018)"  Finally, I can further pursue my interest in mastering data as a language, statistics as grammar rule, and art as information visualization that feed my continuous curiosity. In 2019, I was admitted to Syracuse University's master's program in Applied Data Science. After three years, I am thankful to have this learning journey with my fellow data scientists and professors while going through a pandemic and pivoting my career. In 2021, I finally hung my white lab coat as a pharmaceutical scientist and created a new role for myself within my organization.
+
+## Overview of the major practice areas in data science
+
+## Collect and Organize Data	
+
+## Identify Patterns in Data	
+
+## Alternative Strategies based on the data
+
+## Develop a Plan of Action
+
+## Synthesize the Ethical Dimensions of Data Science Practice
+
+## Demonstrate Communication Skills regarding the Data	
+
+## References
+
 
 
