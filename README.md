@@ -1,4 +1,4 @@
-# MSUDA Portfolio Milestone 
+# MSADA Portfolio Milestone 
 
 ## Syracuse University - M.S. Applied Data Science
 
